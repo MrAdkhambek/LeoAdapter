@@ -102,21 +102,23 @@ interface LeoAdapter<T> {
     fun enableDiffUtil(itemCallback: DiffUtil.ItemCallback<T>?)
 }
 
-fun <T> RecyclerView.setupAdapter(@LayoutRes layoutID: Int, body: LeoAdapter<T>.() -> Unit) {
-    val liAdapter = LeoAdapterImpl<T>(layoutID)
+fun <T> RecyclerView.setupAdapter(@LayoutRes layoutID: Int, body: LeoAdapter<T>.() -> Unit): LeoAdapter<T> {
+    val leoAdapter = LeoAdapterImpl<T>(layoutID)
     this.layoutManager = LinearLayoutManager(context)
-    this.adapter = liAdapter
-    body.invoke(liAdapter)
+    this.adapter = leoAdapter
+    body.invoke(leoAdapter)
+    return leoAdapter
 }
 
 fun <T> RecyclerView.setupAdapter(
     @LayoutRes layoutID: Int, layoutManager: RecyclerView.LayoutManager,
     body: LeoAdapter<T>.() -> Unit
-) {
-    val liAdapter = LeoAdapterImpl<T>(layoutID)
+): LeoAdapter<T> {
+    val leoAdapter = LeoAdapterImpl<T>(layoutID)
     this.layoutManager = layoutManager
-    this.adapter = liAdapter
-    body.invoke(liAdapter)
+    this.adapter = leoAdapter
+    body.invoke(leoAdapter)
+    return leoAdapter
 }
 
 typealias LeoItemBindListener<T> = (view: View, position: Int, item: T) -> Unit

@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
             android.R.color.holo_purple
         )
 
-        recycler.setupAdapter<String>(
+        leoAdapter = recycler.setupAdapter(
             R.layout.recycler_item
         ) {
 
@@ -64,8 +64,6 @@ class MainActivity : AppCompatActivity() {
             }
 
             submitList(data)
-
-            leoAdapter = this
         }
 
         fab.setOnClickListener {
