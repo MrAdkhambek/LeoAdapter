@@ -1,0 +1,2 @@
+include ':app', ':leo'
+rootProject.name='LeoAdapter App'
