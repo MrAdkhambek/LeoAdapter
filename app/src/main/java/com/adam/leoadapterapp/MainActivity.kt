@@ -63,12 +63,12 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            submitList(data)
+            setList(data)
         }
 
         fab.setOnClickListener {
             data.shuffle()
-            leoAdapter.submitList(data)
+            leoAdapter.setList(data)
         }
     }
 }

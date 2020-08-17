@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import kotlinx.android.extensions.LayoutContainer
 
+@DslMarker
+annotation class LeoAdapterDsl
 
 internal class LeoAdapterSync<T>(
     @LayoutRes private val layoutID: Int
@@ -77,6 +79,7 @@ interface LeoAdapter<T> {
     fun bind(listener: LeoItemBindListener<T>)
 }
 
+@LeoAdapterDsl
 fun <T> RecyclerView.setupAdapter(
     @LayoutRes layoutID: Int,
     body: LeoAdapter<T>.() -> Unit
@@ -88,6 +91,7 @@ fun <T> RecyclerView.setupAdapter(
     return leoAdapter
 }
 
+@LeoAdapterDsl
 fun <T> RecyclerView.setupAdapter(
     @LayoutRes layoutID: Int,
     layoutManager: LayoutManager,
@@ -100,6 +104,7 @@ fun <T> RecyclerView.setupAdapter(
     return leoAdapter
 }
 
+@LeoAdapterDsl
 fun <T> RecyclerView.setupAdapter(
     @LayoutRes layoutID: Int,
     diffUtil: ItemCallback<T>,
@@ -113,6 +118,7 @@ fun <T> RecyclerView.setupAdapter(
     return leoAdapter
 }
 
+@LeoAdapterDsl
 fun <T> RecyclerView.setupAdapter(
     @LayoutRes layoutID: Int,
     diffUtil: ItemCallback<T>,
