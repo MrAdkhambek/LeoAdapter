@@ -4,121 +4,127 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.adam.leo.extensions.arrayListOf
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import kotlinx.android.extensions.LayoutContainer
-import java.util.*
 
 
-private class LeoAdapterImpl<T>(
+internal class LeoAdapterSync<T>(
     @LayoutRes private val layoutID: Int
-) : RecyclerView.Adapter<LiVH>(), LeoAdapter<T> {
+) : RecyclerView.Adapter<LeoVH>(), LeoAdapter<T> {
 
     private var _data: List<T> = emptyList()
     private var listener: LeoItemBindListener<T>? = null
 
-    override fun submitList(data: List<T>) {
-        if (itemCallback == null) {
-            _data = data
-            notifyDataSetChanged()
-        } else {
-
-            val result = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
-
-                override fun getOldListSize(): Int = _data.size
-
-                override fun getNewListSize(): Int = data.size
-
-                override fun areItemsTheSame(op: Int, np: Int): Boolean =
-                    itemCallback!!.areItemsTheSame(_data[op], data[np])
-
-                override fun areContentsTheSame(op: Int, np: Int): Boolean =
-                    itemCallback!!.areContentsTheSame(_data[op], data[np])
-            })
-
-            result.dispatchUpdatesTo(this)
-        }
-    }
-
-    override fun addList(data: List<T>) {
-        val temp: ArrayList<T> = arrayListOf(_data, data)
-
-        if (itemCallback == null) {
-            _data = temp
-            notifyDataSetChanged()
-        } else {
-
-            val result = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
-
-                override fun getOldListSize(): Int = _data.size
-
-                override fun getNewListSize(): Int = temp.size
-
-                override fun areItemsTheSame(op: Int, np: Int): Boolean =
-                    itemCallback?.areItemsTheSame(_data[op], temp[np]) ?: true
-
-                override fun areContentsTheSame(op: Int, np: Int): Boolean =
-                    itemCallback?.areContentsTheSame(_data[op], temp[np]) ?: true
-            })
-
-            result.dispatchUpdatesTo(this)
-        }
-    }
-
-    private var itemCallback: DiffUtil.ItemCallback<T>? = null
-    override fun enableDiffUtil(itemCallback: DiffUtil.ItemCallback<T>?) {
-        this.itemCallback = itemCallback
+    override fun setList(data: List<T>) {
+        _data = data
+        notifyDataSetChanged()
     }
 
     override fun bind(listener: LeoItemBindListener<T>) {
         this.listener = listener
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LiVH {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LeoVH {
         val view = LayoutInflater.from(parent.context).inflate(layoutID, parent, false)
-        return LiVH(view)
+        return LeoVH(view)
     }
 
     override fun getItemCount(): Int = _data.size
 
-    override fun onBindViewHolder(holder: LiVH, position: Int) {
+    override fun onBindViewHolder(holder: LeoVH, position: Int) {
         listener?.invoke(holder.itemView, position, _data[position])
     }
 }
 
-private class LiVH(override val containerView: View) : RecyclerView.ViewHolder(containerView),
-    LayoutContainer
+
+internal class LeoAdapterAsync<T>(
+    @LayoutRes private val layoutID: Int,
+    diffUtil: ItemCallback<T>
+) : ListAdapter<T, LeoVH>(diffUtil), LeoAdapter<T> {
+
+    private var _data: List<T> = emptyList()
+    private var listener: LeoItemBindListener<T>? = null
+
+    override fun setList(data: List<T>) {
+        submitList(data)
+    }
+
+    override fun bind(listener: LeoItemBindListener<T>) {
+        this.listener = listener
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LeoVH {
+        val view = LayoutInflater.from(parent.context).inflate(layoutID, parent, false)
+        return LeoVH(view)
+    }
+
+    override fun getItemCount(): Int = _data.size
+
+    override fun onBindViewHolder(holder: LeoVH, position: Int) {
+        listener?.invoke(holder.itemView, position, _data[position])
+    }
+}
+
 
 interface LeoAdapter<T> {
 
-    fun addList(data: List<T>)
-
-    fun submitList(data: List<T>)
+    fun setList(data: List<T>)
 
     fun bind(listener: LeoItemBindListener<T>)
-
-    fun enableDiffUtil(itemCallback: DiffUtil.ItemCallback<T>?)
 }
 
-fun <T> RecyclerView.setupAdapter(@LayoutRes layoutID: Int, body: LeoAdapter<T>.() -> Unit): LeoAdapter<T> {
-    val leoAdapter = LeoAdapterImpl<T>(layoutID)
+fun <T> RecyclerView.setupAdapter(
+    @LayoutRes layoutID: Int,
+    body: LeoAdapter<T>.() -> Unit
+): LeoAdapter<T> {
     this.layoutManager = LinearLayoutManager(context)
+    val leoAdapter = LeoAdapterSync<T>(layoutID)
     this.adapter = leoAdapter
     body.invoke(leoAdapter)
     return leoAdapter
 }
 
 fun <T> RecyclerView.setupAdapter(
-    @LayoutRes layoutID: Int, layoutManager: RecyclerView.LayoutManager,
+    @LayoutRes layoutID: Int,
+    layoutManager: LayoutManager,
     body: LeoAdapter<T>.() -> Unit
 ): LeoAdapter<T> {
-    val leoAdapter = LeoAdapterImpl<T>(layoutID)
+    val leoAdapter = LeoAdapterSync<T>(layoutID)
     this.layoutManager = layoutManager
     this.adapter = leoAdapter
     body.invoke(leoAdapter)
     return leoAdapter
 }
 
+fun <T> RecyclerView.setupAdapter(
+    @LayoutRes layoutID: Int,
+    diffUtil: ItemCallback<T>,
+    layoutManager: LayoutManager,
+    body: LeoAdapter<T>.() -> Unit
+): LeoAdapter<T> {
+    val leoAdapter = LeoAdapterAsync<T>(layoutID, diffUtil)
+    this.layoutManager = layoutManager
+    this.adapter = leoAdapter
+    body.invoke(leoAdapter)
+    return leoAdapter
+}
+
+fun <T> RecyclerView.setupAdapter(
+    @LayoutRes layoutID: Int,
+    diffUtil: ItemCallback<T>,
+    body: LeoAdapter<T>.() -> Unit
+): LeoAdapter<T> {
+    this.layoutManager = LinearLayoutManager(context)
+    val leoAdapter = LeoAdapterAsync<T>(layoutID, diffUtil)
+    this.adapter = leoAdapter
+    body.invoke(leoAdapter)
+    return leoAdapter
+}
+
 typealias LeoItemBindListener<T> = (view: View, position: Int, item: T) -> Unit
+
+internal class LeoVH(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
