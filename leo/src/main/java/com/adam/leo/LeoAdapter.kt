@@ -48,11 +48,10 @@ internal class LeoAdapterAsync<T>(
     diffUtil: ItemCallback<T>
 ) : ListAdapter<T, LeoVH>(diffUtil), LeoAdapter<T> {
 
-    private var _data: List<T> = emptyList()
     private var listener: LeoItemBindListener<T>? = null
 
     override fun setList(data: List<T>) {
-        submitList(data)
+        submitList(ArrayList(data))
     }
 
     override fun bind(listener: LeoItemBindListener<T>) {
@@ -64,10 +63,9 @@ internal class LeoAdapterAsync<T>(
         return LeoVH(view)
     }
 
-    override fun getItemCount(): Int = _data.size
-
     override fun onBindViewHolder(holder: LeoVH, position: Int) {
-        listener?.invoke(holder.itemView, position, _data[position])
+        val item = getItem(position) ?: return
+        listener?.invoke(holder.itemView, position, item)
     }
 }
 

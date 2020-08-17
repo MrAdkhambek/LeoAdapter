@@ -3,6 +3,8 @@ package com.adam.leoadapterapp
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DiffUtil.ItemCallback
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.adam.leo.LeoAdapter
 import com.adam.leo.setupAdapter
 import kotlinx.android.synthetic.main.activity_main.*
@@ -10,38 +12,19 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var leoAdapter: LeoAdapter<String>
+    private lateinit var leoAdapter: LeoAdapter<Person>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val data: ArrayList<String> = arrayListOf(
-            "Adam",
-            "Peter",
-            "John",
-            "Artur",
-            "Joseph",
-            "Adam",
-            "Peter",
-            "John",
-            "Artur",
-            "Joseph",
-            "Adam",
-            "Peter",
-            "John",
-            "Artur",
-            "Joseph",
-            "Adam",
-            "Peter",
-            "John",
-            "Artur",
-            "Joseph",
-            "Adam",
-            "Peter",
-            "John",
-            "Artur",
-            "Joseph"
+        val data: ArrayList<Person> = arrayListOf(
+            Person(1, 21, "Adam"),
+            Person(6, 21, "Adam"),
+            Person(2, 53, "Peter"),
+            Person(3, 54, "John"),
+            Person(4, 34, "Artur"),
+            Person(5, 3, "Joseph")
         )
 
         val color: Array<Int> = arrayOf(
@@ -53,17 +36,16 @@ class MainActivity : AppCompatActivity() {
         )
 
         leoAdapter = recycler.setupAdapter(
-            R.layout.recycler_item
+            R.layout.recycler_item,
+            LinearLayoutManager(recycler.context)
         ) {
 
             bind { view, index, item ->
                 view.findViewById<TextView>(R.id.textView).apply {
-                    text = item
+                    text = item.name
                     setBackgroundResource(color[index % color.size])
                 }
             }
-
-            setList(data)
         }
 
         fab.setOnClickListener {
@@ -71,4 +53,16 @@ class MainActivity : AppCompatActivity() {
             leoAdapter.setList(data)
         }
     }
+}
+
+data class Person(
+    val id: Int,
+    val age: Int,
+    val name: String
+)
+
+private val DIFF_UTIL: ItemCallback<Person> = object : ItemCallback<Person>() {
+    override fun areItemsTheSame(oldItem: Person, newItem: Person): Boolean = oldItem.id == newItem.id
+
+    override fun areContentsTheSame(oldItem: Person, newItem: Person): Boolean = oldItem == newItem
 }
