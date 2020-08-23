@@ -1,15 +1,17 @@
-# LeoAdapter :uzbekistan:
+# LeoAdapter
 [![](https://jitpack.io/v/MrAdkhambek/LeoAdapter.svg)](https://jitpack.io/#MrAdkhambek/LeoAdapter)
 
 
-```groovy
+```gradle
     allprojects {
 		repositories {
 			...
 			maven { url 'https://jitpack.io' }
 		}
    	}
+```
 
+```gradle
 	dependencies {
 	        implementation 'com.github.MrAdkhambek:LeoAdapter:0.2.2'
 	}
