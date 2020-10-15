@@ -13,7 +13,7 @@ allprojects {
 
 ```grad
 dependencies {
-    implementation 'com.github.MrAdkhambek:LeoAdapter:0.2.2'
+    implementation 'com.github.MrAdkhambek:LeoAdapter:0.2.3'
 }
 ```
 
@@ -56,6 +56,32 @@ val leoAdapter = recycler.setupAdapter(
                 text = item.name
                 setBackgroundResource(color[index % color.size])
             }
+        }
+}
+```
+
+# We now support spinnerView and ViewPager2
+
+```kotlin
+val leoAdapter = spinnerView.setupAdapter(
+        R.layout.recycler_item
+    ) {
+        bind { view, index, item ->
+            view.findViewById<TextView>(R.id.textView).apply {
+                text = item.name
+                setBackgroundResource(color[index % color.size])
+            }
+        }
+}
+```
+
+```kotlin
+val leoAdapter = viewPager2.setupAdapter(
+        R.layout.recycler_item
+    ) {
+        bind { view, index, item ->
+            view.findViewById<TextView>(R.id.textView).text = item.name
+            view.setBackgroundResource(color[index % color.size])
         }
 }
 ```
