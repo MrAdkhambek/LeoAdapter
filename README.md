@@ -60,10 +60,10 @@ val leoAdapter = recycler.setupAdapter(
 }
 ```
 
-# We now support spinnerView and ViewPager2
+# We now support spinner and ViewPager2
 
 ```kotlin
-val leoAdapter = spinnerView.setupAdapter(
+val leoAdapter = spinner.setupAdapter(
         R.layout.recycler_item
     ) {
         bind { view, index, item ->
