@@ -13,7 +13,7 @@ allprojects {
 
 ```grad
 dependencies {
-    implementation 'com.github.MrAdkhambek:LeoAdapter:0.2.3'
+    implementation 'com.github.MrAdkhambek:LeoAdapter:0.2.4'
 }
 ```
 
