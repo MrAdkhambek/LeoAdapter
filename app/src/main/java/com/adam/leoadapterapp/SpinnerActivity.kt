@@ -19,8 +19,10 @@ class SpinnerActivity : AppCompatActivity() {
         val leoAdapter: LeoAdapter<Person> = spinner.setupAdapter(
             R.layout.recycler_item
         ) {
-            bind { view, index, item ->
-                view.findViewById<TextView>(R.id.textView).apply {
+            val textView: TextView = findViewById(R.id.textView)
+
+            bind { _, index, item ->
+                textView.apply {
                     text = item.name
                     setBackgroundResource(colors[index % colors.size])
                 }

@@ -4,12 +4,10 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.adam.leo.LeoAdapter
 import com.adam.leo.recycler.setupAdapter
 import com.adam.leoadapterapp.data.Person
 import com.adam.leoadapterapp.data.colors
-import com.adam.leoadapterapp.data.data
 import kotlinx.android.synthetic.main.activity_recycler.*
 
 
@@ -19,20 +17,23 @@ class RecyclerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recycler)
 
-        val leoAdapter: LeoAdapter<Person> = recycler.setupAdapter(
-            R.layout.recycler_item,
-            DIFF_UTIL,
-            LinearLayoutManager(recycler.context)
+
+        val leoAdapter: LeoAdapter<String> = recycler.setupAdapter(
+            R.layout.recycler_item
         ) {
-            bind { view, index, item ->
-                view.findViewById<TextView>(R.id.textView).apply {
-                    text = item.name
-                    setBackgroundResource(colors[index % colors.size])
-                }
+            val textView: TextView = findViewById(R.id.textView)
+
+            bind { _, index, item ->
+                textView.text = item
+                textView.setBackgroundResource(colors[index % colors.size])
             }
         }
 
-        leoAdapter.setList(data.shuffled())
+        val data: List<String> = (1..1000).map {
+            "Hi $it"
+        }
+
+        leoAdapter.setList(data)
         fab.setOnClickListener {
             leoAdapter.setList(data.shuffled())
         }

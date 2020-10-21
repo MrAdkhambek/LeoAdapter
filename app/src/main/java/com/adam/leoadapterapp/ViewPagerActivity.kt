@@ -20,13 +20,15 @@ class ViewPagerActivity : AppCompatActivity() {
         val leoAdapter: LeoAdapter<Person> = viewPager.setupAdapter(
             R.layout.page_person
         ) {
+
+            val personNameAgeView: AppCompatTextView = findViewById(R.id.personAge)
+            val personNameTextView: AppCompatTextView = findViewById(R.id.personName)
+
             bind { view, index, item ->
-
-                view.findViewById<AppCompatTextView>(R.id.personName).text = item.name
-                view.setBackgroundResource(colors[index % colors.size])
-
+                personNameTextView.text = item.name
                 @SuppressLint("SetTextI18n")
-                view.findViewById<AppCompatTextView>(R.id.personAge).text = "Age = ${item.age}"
+                personNameAgeView.text = "Age = ${item.age}"
+                view.setBackgroundResource(colors[index % colors.size])
             }
         }
 
