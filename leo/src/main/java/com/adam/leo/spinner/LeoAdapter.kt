@@ -39,7 +39,8 @@ internal class LeoAdapter<T>(
                     this.listener = listener
                 }
 
-                override fun onBind() {
+                override fun onBind(position: Int) {
+                    this.currentPositionImpl = position
                     listener?.invoke(view, position, item)
                 }
 
@@ -49,7 +50,7 @@ internal class LeoAdapter<T>(
             tempHolder
         }
 
-        holder.onBind()
+        holder.onBind(position)
         return view
     }
 
@@ -59,7 +60,12 @@ internal class LeoAdapter<T>(
     }
 
     abstract inner class LeoVH<T> : LeoAdapterScope<T> {
-        abstract fun onBind()
+
+        var currentPositionImpl = -1
+        override val currentPosition: Int
+            get() = currentPositionImpl
+
+        abstract fun onBind(position: Int)
         abstract override fun <V : View> findViewById(id: Int): V
         abstract override fun bind(listener: LeoItemBindListener<T>)
     }

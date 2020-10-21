@@ -1,7 +1,10 @@
 package com.adam.leoadapterapp
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DiffUtil
 import com.adam.leo.LeoAdapter
@@ -12,6 +15,7 @@ import com.adam.leoadapterapp.data.data
 import kotlinx.android.synthetic.main.activity_recycler.*
 
 
+@SuppressLint("SetTextI18n")
 class RecyclerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,13 +28,19 @@ class RecyclerActivity : AppCompatActivity() {
             DIFF_UTIL
         ) {
             val textView: TextView = findViewById(R.id.textView)
+            textView.setOnClickListener {
+                Toast.makeText(it.context, currentPosition.toString(), Toast.LENGTH_SHORT).show()
+            }
 
             bind { _, index, item ->
-                textView.text = item.name
+                textView.text = "${item.name}  $index"
                 textView.setBackgroundResource(colors[index % colors.size])
             }
         }
 
+        val data = (1..1000).map {
+            Person(it, it,"Adam")
+        }
 
         leoAdapter.setList(data)
         fab.setOnClickListener {

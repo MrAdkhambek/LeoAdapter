@@ -16,6 +16,9 @@ interface LeoAdapter<T> {
 interface LeoAdapterScope<T> {
 
     @LeoAdapterDsl
+    val currentPosition: Int
+
+    @LeoAdapterDsl
     fun bind(listener: LeoItemBindListener<T>)
 
     @LeoAdapterDsl

@@ -25,6 +25,8 @@ internal class LeoAdapterSync<T>(
     ) : BaseVH(containerView), LeoAdapterScope<T> {
 
         private var listener: LeoItemBindListener<T>? = null
+        override val currentPosition: Int
+            get() = super.getAdapterPosition()
 
         override fun onBind() {
             listener?.invoke(containerView, adapterPosition, _data[adapterPosition])
@@ -35,6 +37,8 @@ internal class LeoAdapterSync<T>(
         override fun bind(listener: LeoItemBindListener<T>) {
             this.listener = listener
         }
+
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DelegateVH {
@@ -63,6 +67,8 @@ internal class LeoAdapterAsync<T>(
     ) : BaseVH(containerView), LeoAdapterScope<T> {
 
         private var listener: LeoItemBindListener<T>? = null
+        override val currentPosition: Int
+            get() = super.getAdapterPosition()
 
         override fun onBind() {
             val position = adapterPosition
