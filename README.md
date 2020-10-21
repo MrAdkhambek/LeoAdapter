@@ -4,86 +4,33 @@
 
 ```gradle
 allprojects {
-		repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
+	repositories {
+		...
+		maven { url 'https://jitpack.io' }
+	}
 }
 ```
 
 ```grad
 dependencies {
-    implementation 'com.github.MrAdkhambek:LeoAdapter:0.2.4'
+    implementation 'com.github.MrAdkhambek:LeoAdapter:0.2.5'
 }
 ```
 
 ```kotlin
-val leoAdapter = recycler.setupAdapter(
-        R.layout.recycler_item
-    ) {
-        bind { view, index, item ->
-            view.findViewById<TextView>(R.id.textView).apply {
-                text = item.name
-                setBackgroundResource(color[index % color.size])
+        val leoAdapter: LeoAdapter<Person> = recycler.setupAdapter(
+            R.layout.recycler_item,
+            DIFF_UTIL
+        ) {
+            val textView: TextView = findViewById(R.id.textView)
+
+            bind { _, index, item ->
+                textView.text = item.name
+                textView.setBackgroundResource(colors[index % colors.size])
             }
         }
-}
-```
 
-```kotlin
-val leoAdapter = recycler.setupAdapter(
-        R.layout.recycler_item,
-        LinearLayoutManager(recycler.context)
-    ) {
-        bind { view, index, item ->
-            view.findViewById<TextView>(R.id.textView).apply {
-                text = item.name
-                setBackgroundResource(color[index % color.size])
-            }
-        }
-}
-```
-
-
-```kotlin
-val leoAdapter = recycler.setupAdapter(
-        R.layout.recycler_item,
-        DIFF_ITEM_CALLBACK,
-        LinearLayoutManager(recycler.context)
-    ) {
-        bind { view, index, item ->
-            view.findViewById<TextView>(R.id.textView).apply {
-                text = item.name
-                setBackgroundResource(color[index % color.size])
-            }
-        }
-}
-```
-
-# We now support spinner and ViewPager2
-
-```kotlin
-val leoAdapter = spinner.setupAdapter(
-        R.layout.recycler_item
-    ) {
-        bind { view, index, item ->
-            view.findViewById<TextView>(R.id.textView).apply {
-                text = item.name
-                setBackgroundResource(color[index % color.size])
-            }
-        }
-}
-```
-
-```kotlin
-val leoAdapter = viewPager2.setupAdapter(
-        R.layout.recycler_item
-    ) {
-        bind { view, index, item ->
-            view.findViewById<TextView>(R.id.textView).text = item.name
-            view.setBackgroundResource(color[index % color.size])
-        }
-}
+        leoAdapter.setList(data)
 ```
 
 ![Image](media/carbon1.png)
