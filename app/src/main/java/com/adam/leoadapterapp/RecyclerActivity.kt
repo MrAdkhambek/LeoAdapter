@@ -8,6 +8,7 @@ import com.adam.leo.LeoAdapter
 import com.adam.leo.recycler.setupAdapter
 import com.adam.leoadapterapp.data.Person
 import com.adam.leoadapterapp.data.colors
+import com.adam.leoadapterapp.data.data
 import kotlinx.android.synthetic.main.activity_recycler.*
 
 
@@ -18,20 +19,18 @@ class RecyclerActivity : AppCompatActivity() {
         setContentView(R.layout.activity_recycler)
 
 
-        val leoAdapter: LeoAdapter<String> = recycler.setupAdapter(
-            R.layout.recycler_item
+        val leoAdapter: LeoAdapter<Person> = recycler.setupAdapter(
+            R.layout.recycler_item,
+            DIFF_UTIL
         ) {
             val textView: TextView = findViewById(R.id.textView)
 
             bind { _, index, item ->
-                textView.text = item
+                textView.text = item.name
                 textView.setBackgroundResource(colors[index % colors.size])
             }
         }
 
-        val data: List<String> = (1..1000).map {
-            "Hi $it"
-        }
 
         leoAdapter.setList(data)
         fab.setOnClickListener {
