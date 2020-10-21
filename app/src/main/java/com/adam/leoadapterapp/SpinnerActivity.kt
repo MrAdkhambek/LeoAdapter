@@ -18,6 +18,7 @@ class SpinnerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_spinner)
 
+
         val leoAdapter: LeoAdapter<Person> = spinner.setupAdapter(
             R.layout.recycler_item
         ) {
