@@ -23,6 +23,10 @@ dependencies {
         DIFF_UTIL
     ) {
         val textView: TextView = findViewById(R.id.textView)
+        textView.setOnClickListener {
+            val item = getItem(currentPosition)
+            Toast.makeText(it.context, "Name : ${item.name}  Age : ${item.age}", Toast.LENGTH_SHORT).show()
+        }
 
         bind { _, index, item ->
             textView.text = item.name
@@ -40,6 +44,10 @@ dependencies {
         DIFF_UTIL
     ) {
         val textView: TextView = findViewById(R.id.textView)
+        textView.setOnClickListener {
+            val item = getItem(currentPosition)
+            Toast.makeText(it.context, "Name : ${item.name}  Age : ${item.age}", Toast.LENGTH_SHORT).show()
+        }
 
         bind { _, index, item ->
             textView.text = item.name
@@ -56,6 +64,10 @@ dependencies {
         R.layout.recycler_item
     ) {
         val textView: TextView = findViewById(R.id.textView)
+        textView.setOnClickListener {
+            val item = getItem(currentPosition)
+            Toast.makeText(it.context, "Name : ${item.name}  Age : ${item.age}", Toast.LENGTH_SHORT).show()
+        }
 
         bind { _, index, item ->
             textView.text = item.name
@@ -64,6 +76,13 @@ dependencies {
     }
 
     leoAdapter.setList(data)
+```
+```kotlin
+data class Person(
+    val id: Int,
+    val age: Int,
+    val name: String
+)
 ```
 
 ![Image](media/carbon1.png)
