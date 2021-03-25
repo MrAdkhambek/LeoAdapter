@@ -18,20 +18,19 @@ dependencies {
 ```
 
 ```kotlin
-    val leoAdapter: LeoAdapter<Person> = recycler.setupAdapter(
-        R.layout.recycler_item,
-        DIFF_UTIL
-    ) {
-        val textView: TextView = findViewById(R.id.textView)
-        textView.setOnClickListener {
-            val item = getItem(currentPosition)
-            Toast.makeText(it.context, "Name : ${item.name}  Age : ${item.age}", Toast.LENGTH_SHORT).show()
-        }
+    val leoAdapter: LeoAdapter<Person> = binding.recycler.setupAdapter(
+        RecyclerItemBinding::inflate
+    ) { itemBinding, index, item ->
+        itemBinding.textView.text = "${item.name}  $index"
+        itemBinding.textView.setBackgroundResource(colors[index % colors.size])
 
-        bind { _, index, item ->
-            textView.text = item.name
-            textView.setBackgroundResource(colors[index % colors.size])
+        itemBinding.root.setOnClickListener {
+            Toast.makeText(itemBinding.root.context, "${item.name}  $index", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    val data = (1..1000).map {
+        Person(it, it, "Adam")
     }
 
     leoAdapter.setList(data)
@@ -39,20 +38,19 @@ dependencies {
 
 
 ```kotlin
-    val leoAdapter: LeoAdapter<Person> = viewPager2.setupAdapter(
-        R.layout.recycler_item,
-        DIFF_UTIL
-    ) {
-        val textView: TextView = findViewById(R.id.textView)
-        textView.setOnClickListener {
-            val item = getItem(currentPosition)
-            Toast.makeText(it.context, "Name : ${item.name}  Age : ${item.age}", Toast.LENGTH_SHORT).show()
-        }
+    val leoAdapter: LeoAdapter<Person> = binding.viewPager2.setupAdapter(
+        RecyclerItemBinding::inflate
+    ) { itemBinding, index, item ->
+        itemBinding.textView.text = "${item.name}  $index"
+        itemBinding.textView.setBackgroundResource(colors[index % colors.size])
 
-        bind { _, index, item ->
-            textView.text = item.name
-            textView.setBackgroundResource(colors[index % colors.size])
+        itemBinding.root.setOnClickListener {
+            Toast.makeText(itemBinding.root.context, "${item.name}  $index", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    val data = (1..1000).map {
+        Person(it, it, "Adam")
     }
 
     leoAdapter.setList(data)
@@ -60,23 +58,24 @@ dependencies {
 
 
 ```kotlin
-    val leoAdapter: LeoAdapter<Person> = spinner.setupAdapter(
-        R.layout.recycler_item
-    ) {
-        val textView: TextView = findViewById(R.id.textView)
-        textView.setOnClickListener {
-            val item = getItem(currentPosition)
-            Toast.makeText(it.context, "Name : ${item.name}  Age : ${item.age}", Toast.LENGTH_SHORT).show()
-        }
+    val leoAdapter: LeoAdapter<Person> = binding.spinner.setupAdapter(
+        RecyclerItemBinding::inflate
+    ) { itemBinding, index, item ->
+        itemBinding.textView.text = "${item.name}  $index"
+        itemBinding.textView.setBackgroundResource(colors[index % colors.size])
 
-        bind { _, index, item ->
-            textView.text = item.name
-            textView.setBackgroundResource(colors[index % colors.size])
+        itemBinding.root.setOnClickListener {
+            Toast.makeText(itemBinding.root.context, "${item.name}  $index", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    val data = (1..1000).map {
+        Person(it, it, "Adam")
     }
 
     leoAdapter.setList(data)
 ```
+
 ```kotlin
 data class Person(
     val id: Int,
@@ -85,4 +84,4 @@ data class Person(
 )
 ```
 
-![Image](media/carbon1.png)
+![Image](media/carbon.png)
