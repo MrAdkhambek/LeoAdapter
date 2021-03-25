@@ -1,12 +1,14 @@
 package com.adam.leo.core
 
-import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.extensions.LayoutContainer
+import androidx.viewbinding.ViewBinding
+import com.adam.leo.LeoItemBindListener
 
 
-internal abstract class BaseVH(
-    containerView: View
-) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-    abstract fun onBind()
+internal class BaseVH<T, VB : ViewBinding>(
+    private val viewBinding: VB,
+    private val listener: LeoItemBindListener<T, VB>
+) : RecyclerView.ViewHolder(viewBinding.root) {
+
+    operator fun invoke(position: Int, item: T) = listener.invoke(viewBinding, position, item)
 }

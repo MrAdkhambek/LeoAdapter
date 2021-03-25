@@ -1,24 +1,26 @@
 package com.adam.leo.viewpager
 
 import android.view.LayoutInflater
-import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.DiffUtil
+import androidx.viewbinding.ViewBinding
 import androidx.viewpager2.widget.ViewPager2
+import androidx.viewpager2.widget.ViewPager2.Orientation
 import com.adam.leo.LeoAdapter
 import com.adam.leo.LeoAdapterDsl
-import com.adam.leo.LeoAdapterScope
+import com.adam.leo.LeoItemBindListener
+import com.adam.leo.LeoItemBinding
 import com.adam.leo.core.LeoAdapterAsync
 import com.adam.leo.core.LeoAdapterSync
 
 
 @LeoAdapterDsl
-fun <T> ViewPager2.setupAdapter(
-    @LayoutRes layoutID: Int,
-    body: LeoAdapterScope<T>.() -> Unit
+fun <T, VB : ViewBinding> ViewPager2.setupAdapter(
+    getViewBinding: LeoItemBinding<VB>,
+    listener: LeoItemBindListener<T, VB>
 ): LeoAdapter<T> {
     val inflater: LayoutInflater = LayoutInflater.from(context)
 
-    val leoAdapter: LeoAdapterSync<T> = LeoAdapterSync(inflater, layoutID, body)
+    val leoAdapter: LeoAdapterSync<T, VB> = LeoAdapterSync(inflater, getViewBinding, listener)
     this.adapter = leoAdapter
 
     return leoAdapter
@@ -26,45 +28,46 @@ fun <T> ViewPager2.setupAdapter(
 
 
 @LeoAdapterDsl
-fun <T> ViewPager2.setupAdapter(
-    @LayoutRes layoutID: Int,
-    @ViewPager2.Orientation orientation: Int,
-    body: LeoAdapterScope<T>.() -> Unit
+fun <T, VB : ViewBinding> ViewPager2.setupAdapter(
+    @Orientation orientation: Int,
+    getViewBinding: LeoItemBinding<VB>,
+    listener: LeoItemBindListener<T, VB>
 ): LeoAdapter<T> {
     val inflater: LayoutInflater = LayoutInflater.from(context)
     this.orientation = orientation
 
-    val leoAdapter: LeoAdapterSync<T> = LeoAdapterSync(inflater, layoutID, body)
+    val leoAdapter: LeoAdapterSync<T, VB> = LeoAdapterSync(inflater, getViewBinding, listener)
     this.adapter = leoAdapter
 
     return leoAdapter
 }
 
 @LeoAdapterDsl
-fun <T> ViewPager2.setupAdapter(
-    @LayoutRes layoutID: Int,
+fun <T, VB : ViewBinding> ViewPager2.setupAdapter(
+    getViewBinding: LeoItemBinding<VB>,
     diffUtil: DiffUtil.ItemCallback<T>,
-    @ViewPager2.Orientation orientation: Int,
-    body: LeoAdapterScope<T>.() -> Unit
+    listener: LeoItemBindListener<T, VB>
+): LeoAdapter<T> {
+
+    val inflater: LayoutInflater = LayoutInflater.from(context)
+
+    val leoAdapter: LeoAdapterAsync<T, VB> = LeoAdapterAsync(inflater, diffUtil, getViewBinding, listener)
+    this.adapter = leoAdapter
+
+    return leoAdapter
+}
+
+@LeoAdapterDsl
+fun <T, VB : ViewBinding> ViewPager2.setupAdapter(
+    @Orientation orientation: Int,
+    getViewBinding: LeoItemBinding<VB>,
+    diffUtil: DiffUtil.ItemCallback<T>,
+    listener: LeoItemBindListener<T, VB>
 ): LeoAdapter<T> {
     val inflater: LayoutInflater = LayoutInflater.from(context)
     this.orientation = orientation
 
-    val leoAdapter: LeoAdapterAsync<T> = LeoAdapterAsync(inflater, layoutID, diffUtil, body)
-    this.adapter = leoAdapter
-
-    return leoAdapter
-}
-
-@LeoAdapterDsl
-fun <T> ViewPager2.setupAdapter(
-    @LayoutRes layoutID: Int,
-    diffUtil: DiffUtil.ItemCallback<T>,
-    body: LeoAdapterScope<T>.() -> Unit
-): LeoAdapter<T> {
-    val inflater: LayoutInflater = LayoutInflater.from(context)
-
-    val leoAdapter: LeoAdapterAsync<T> = LeoAdapterAsync(inflater, layoutID, diffUtil, body)
+    val leoAdapter: LeoAdapterAsync<T, VB> = LeoAdapterAsync(inflater, diffUtil, getViewBinding, listener)
     this.adapter = leoAdapter
 
     return leoAdapter

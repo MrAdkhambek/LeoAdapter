@@ -3,25 +3,26 @@ package com.adam.leoadapterapp
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.*
+import com.adam.leoadapterapp.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        val binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
 
-        actionRecycler.setOnClickListener {
+        binding.actionRecycler.setOnClickListener {
             startActivity(Intent(this, RecyclerActivity::class.java))
         }
 
-        actionSpinner.setOnClickListener {
+        binding.actionSpinner.setOnClickListener {
             startActivity(Intent(this, SpinnerActivity::class.java))
         }
 
-        actionViewPager.setOnClickListener {
+        binding.actionViewPager.setOnClickListener {
             startActivity(Intent(this, ViewPagerActivity::class.java))
         }
     }

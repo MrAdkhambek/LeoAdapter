@@ -2,8 +2,6 @@ package com.adam.leoadapterapp
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DiffUtil
@@ -11,8 +9,8 @@ import com.adam.leo.LeoAdapter
 import com.adam.leo.recycler.setupAdapter
 import com.adam.leoadapterapp.data.Person
 import com.adam.leoadapterapp.data.colors
-import com.adam.leoadapterapp.data.data
-import kotlinx.android.synthetic.main.activity_recycler.*
+import com.adam.leoadapterapp.databinding.ActivityRecyclerBinding
+import com.adam.leoadapterapp.databinding.RecyclerItemBinding
 
 
 @SuppressLint("SetTextI18n")
@@ -21,29 +19,26 @@ class RecyclerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recycler)
+        val binding = ActivityRecyclerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
+        val leoAdapter: LeoAdapter<Person> = binding.recycler.setupAdapter(
+            RecyclerItemBinding::inflate
+        ) { itemBinding, index, item ->
+            itemBinding.textView.text = "${item.name}  $index"
+            itemBinding.textView.setBackgroundResource(colors[index % colors.size])
 
-        val leoAdapter: LeoAdapter<Person> = recycler.setupAdapter(
-            R.layout.recycler_item,
-            DIFF_UTIL
-        ) {
-            val textView: TextView = findViewById(R.id.textView)
-            textView.setOnClickListener {
-                Toast.makeText(it.context, currentPosition.toString(), Toast.LENGTH_SHORT).show()
-            }
-
-            bind { _, index, item ->
-                textView.text = "${item.name}  $index"
-                textView.setBackgroundResource(colors[index % colors.size])
+            itemBinding.root.setOnClickListener {
+                Toast.makeText(itemBinding.root.context, "${item.name}  $index", Toast.LENGTH_SHORT).show()
             }
         }
 
         val data = (1..1000).map {
-            Person(it, it,"Adam")
+            Person(it, it, "Adam")
         }
 
         leoAdapter.setList(data)
-        fab.setOnClickListener {
+        binding.fab.setOnClickListener {
             leoAdapter.setList(data.shuffled())
         }
     }

@@ -1,53 +1,31 @@
 package com.adam.leo.core
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
 import com.adam.leo.LeoAdapter
-import com.adam.leo.LeoAdapterScope
 import com.adam.leo.LeoItemBindListener
+import com.adam.leo.LeoItemBinding
 
 
-internal class LeoAdapterSync<T>(
+internal class LeoAdapterSync<T, VB : ViewBinding>(
     private val inflater: LayoutInflater,
-    @LayoutRes private val layoutID: Int,
-    private val holderDelegate: LeoAdapterScope<T>.() -> Unit
-) : RecyclerView.Adapter<BaseVH>(), LeoAdapter<T> {
+    private val getViewBinding: LeoItemBinding<VB>,
+    private val listener: LeoItemBindListener<T, VB>
+) : RecyclerView.Adapter<BaseVH<T, VB>>(), LeoAdapter<T> {
 
     private var _data: List<T> = emptyList()
 
-    internal inner class DelegateVH(
-        override val containerView: View
-    ) : BaseVH(containerView), LeoAdapterScope<T> {
-
-        private var listener: LeoItemBindListener<T>? = null
-        override val currentPosition: Int
-            get() = super.getAdapterPosition()
-
-        override fun onBind() {
-            listener?.invoke(containerView, adapterPosition, _data[adapterPosition])
-        }
-
-        override fun <V : View> findViewById(id: Int): V = containerView.findViewById(id)
-
-        override fun bind(listener: LeoItemBindListener<T>) {
-            this.listener = listener
-        }
-
-
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DelegateVH {
-        val view: View = inflater.inflate(layoutID, parent, false)
-        return DelegateVH(view).apply(holderDelegate)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseVH<T, VB> {
+        val binding = getViewBinding(inflater, parent, false)
+        return BaseVH(binding, listener)
     }
 
     override fun getItemCount(): Int = _data.size
-    override fun onBindViewHolder(holder: BaseVH, position: Int): Unit = holder.onBind()
+    override fun onBindViewHolder(holder: BaseVH<T, VB>, position: Int): Unit = holder(position, _data[position])
 
     override fun setList(data: List<T>) {
         _data = data
@@ -55,38 +33,19 @@ internal class LeoAdapterSync<T>(
     }
 }
 
-internal class LeoAdapterAsync<T>(
+
+internal class LeoAdapterAsync<T, VB : ViewBinding>(
     private val inflater: LayoutInflater,
-    @LayoutRes private val layoutID: Int,
     diffUtil: DiffUtil.ItemCallback<T>,
-    private val holderDelegate: LeoAdapterScope<T>.() -> Unit
-) : ListAdapter<T, BaseVH>(diffUtil), LeoAdapter<T> {
+    private val getViewBinding: LeoItemBinding<VB>,
+    private val listener: LeoItemBindListener<T, VB>
+) : ListAdapter<T, BaseVH<T, VB>>(diffUtil), LeoAdapter<T> {
 
-    internal inner class LeoVH(
-        override val containerView: View
-    ) : BaseVH(containerView), LeoAdapterScope<T> {
-
-        private var listener: LeoItemBindListener<T>? = null
-        override val currentPosition: Int
-            get() = super.getAdapterPosition()
-
-        override fun onBind() {
-            val position = adapterPosition
-            listener?.invoke(containerView, position, getItem(position))
-        }
-
-        override fun <V : View> findViewById(id: Int): V = containerView.findViewById(id)
-
-        override fun bind(listener: LeoItemBindListener<T>) {
-            this.listener = listener
-        }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LeoVH {
-        val view: View = inflater.inflate(layoutID, parent, false)
-        return LeoVH(view).apply(holderDelegate)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseVH<T, VB> {
+        val binding = getViewBinding(inflater, parent, false)
+        return BaseVH(binding, listener)
     }
 
     override fun setList(data: List<T>): Unit = submitList(data)
-    override fun onBindViewHolder(holder: BaseVH, position: Int): Unit = holder.onBind()
+    override fun onBindViewHolder(holder: BaseVH<T, VB>, position: Int): Unit = holder(position, getItem(position))
 }

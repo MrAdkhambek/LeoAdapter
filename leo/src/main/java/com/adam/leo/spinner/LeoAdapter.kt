@@ -5,20 +5,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Spinner
-import androidx.annotation.LayoutRes
+import androidx.viewbinding.ViewBinding
 import com.adam.leo.LeoAdapter
 import com.adam.leo.LeoAdapterDsl
-import com.adam.leo.LeoAdapterScope
 import com.adam.leo.LeoItemBindListener
+import com.adam.leo.LeoItemBinding
+import com.adam.leo.core.BaseVH
 
 
-internal class LeoAdapter<T>(
+internal class LeoAdapter<T, VB : ViewBinding>(
     private val inflater: LayoutInflater,
-    @LayoutRes private val layoutID: Int,
     private var data: List<T> = arrayListOf(),
-    private val holderDelegate: LeoAdapterScope<T>.() -> Unit
+    private val getViewBinding: LeoItemBinding<VB>,
+    private val listener: LeoItemBindListener<T, VB>
 ) : BaseAdapter(), LeoAdapter<T> {
-
 
     override fun getCount(): Int = data.size
     override fun getItem(position: Int): T = data[position]
@@ -27,30 +27,17 @@ internal class LeoAdapter<T>(
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val item: T = getItem(position)
 
-        val view: View = convertView ?: inflater.inflate(layoutID, parent, false)
-        val holder: LeoVH<T> = (view.tag as? LeoVH<T>?) ?: run {
-            val tempHolder = object : LeoVH<T>() {
+        val binding: VB = getViewBinding(inflater, parent, false)
+        val view: View = convertView ?: binding.root
 
-                private var listener: LeoItemBindListener<T>? = null
-
-                override fun <V : View> findViewById(id: Int): V = view.findViewById(id)
-
-                override fun bind(listener: LeoItemBindListener<T>) {
-                    this.listener = listener
-                }
-
-                override fun onBind(position: Int) {
-                    this.currentPositionImpl = position
-                    listener?.invoke(view, position, item)
-                }
-
-            }.apply(holderDelegate)
-
+        @Suppress("UNCHECKED_CAST")
+        val holder: BaseVH<T, VB> = (view.tag as? BaseVH<T, VB>?) ?: run {
+            val tempHolder = BaseVH(binding, listener)
             view.tag = tempHolder
             tempHolder
         }
 
-        holder.onBind(position)
+        holder(position, item)
         return view
     }
 
@@ -58,42 +45,24 @@ internal class LeoAdapter<T>(
         this.data = ArrayList(data)
         notifyDataSetChanged()
     }
-
-    abstract inner class LeoVH<T> : LeoAdapterScope<T> {
-
-        var currentPositionImpl = -1
-        override val currentPosition: Int
-            get() = currentPositionImpl
-
-        abstract fun onBind(position: Int)
-        abstract override fun <V : View> findViewById(id: Int): V
-        abstract override fun bind(listener: LeoItemBindListener<T>)
-    }
 }
 
 
 @LeoAdapterDsl
-fun <T> Spinner.setupAdapter(
-    @LayoutRes layoutID: Int,
-    body: LeoAdapterScope<T>.() -> Unit
-): LeoAdapter<T> {
-    val inflater: LayoutInflater = LayoutInflater.from(context)
-
-    val leoAdapter = LeoAdapter(inflater, layoutID, arrayListOf(), body)
-    this.adapter = leoAdapter
-
-    return leoAdapter
-}
+fun <T, VB : ViewBinding> Spinner.setupAdapter(
+    getViewBinding: LeoItemBinding<VB>,
+    listener: LeoItemBindListener<T, VB>
+): LeoAdapter<T> = setupAdapter(arrayListOf(), getViewBinding, listener)
 
 @LeoAdapterDsl
-fun <T> Spinner.setupAdapter(
-    @LayoutRes layoutID: Int,
+fun <T, VB : ViewBinding> Spinner.setupAdapter(
     data: List<T>,
-    body: LeoAdapterScope<T>.() -> Unit
+    getViewBinding: LeoItemBinding<VB>,
+    listener: LeoItemBindListener<T, VB>
 ): LeoAdapter<T> {
     val inflater: LayoutInflater = LayoutInflater.from(context)
 
-    val leoAdapter = LeoAdapter(inflater, layoutID, data, body)
+    val leoAdapter = LeoAdapter(inflater, data, getViewBinding, listener)
     this.adapter = leoAdapter
 
     return leoAdapter

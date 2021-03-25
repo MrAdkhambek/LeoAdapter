@@ -4,35 +4,31 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatTextView
 import com.adam.leo.LeoAdapter
 import com.adam.leo.viewpager.setupAdapter
 import com.adam.leoadapterapp.data.Person
 import com.adam.leoadapterapp.data.colors
-import kotlinx.android.synthetic.main.activity_view_pager.*
+import com.adam.leoadapterapp.databinding.ActivityViewPagerBinding
+import com.adam.leoadapterapp.databinding.PagePersonBinding
 
 
 @SuppressLint("SetTextI18n")
 class ViewPagerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_view_pager)
+        val binding = ActivityViewPagerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val leoAdapter: LeoAdapter<Person> = viewPager.setupAdapter(
-            R.layout.page_person
-        ) {
+        val leoAdapter: LeoAdapter<Person> = binding.viewPager.setupAdapter(
+            PagePersonBinding::inflate
+        ) { itemBinding, index, item ->
 
-            val personNameAgeView: AppCompatTextView = findViewById(R.id.personAge)
-            val personNameTextView: AppCompatTextView = findViewById(R.id.personName)
+            itemBinding.personName.text = "${item.name}  $index"
+            itemBinding.personAge.text = "Age = ${item.age}"
+            itemBinding.root.setBackgroundResource(colors[index % colors.size])
 
-            personNameAgeView.setOnClickListener {
-                Toast.makeText(it.context, currentPosition.toString(), Toast.LENGTH_SHORT).show()
-            }
-
-            bind { view, index, item ->
-                personNameTextView.text = "${item.name}  $index"
-                personNameAgeView.text = "Age = ${item.age}"
-                view.setBackgroundResource(colors[index % colors.size])
+            itemBinding.root.setOnClickListener {
+                Toast.makeText(itemBinding.root.context, "${item.name}  $index", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -41,7 +37,7 @@ class ViewPagerActivity : AppCompatActivity() {
         }
 
         leoAdapter.setList(data.shuffled())
-        fab.setOnClickListener {
+        binding.fab.setOnClickListener {
             leoAdapter.setList(data.shuffled())
         }
     }
