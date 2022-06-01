@@ -1,16 +1,16 @@
-package com.adam.leo.viewpager
+package me.adkhambek.leo.viewpager
 
 import android.view.LayoutInflater
 import androidx.recyclerview.widget.DiffUtil
 import androidx.viewbinding.ViewBinding
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.Orientation
-import com.adam.leo.LeoAdapter
-import com.adam.leo.LeoAdapterDsl
-import com.adam.leo.LeoItemBindListener
-import com.adam.leo.LeoItemBinding
-import com.adam.leo.core.LeoAdapterAsync
-import com.adam.leo.core.LeoAdapterSync
+import me.adkhambek.leo.LeoAdapter
+import me.adkhambek.leo.LeoAdapterDsl
+import me.adkhambek.leo.LeoItemBindListener
+import me.adkhambek.leo.LeoItemBinding
+import me.adkhambek.leo.core.LeoAdapterAsync
+import me.adkhambek.leo.core.LeoAdapterSync
 
 
 @LeoAdapterDsl
@@ -18,6 +18,7 @@ fun <T, VB : ViewBinding> ViewPager2.setupAdapter(
     getViewBinding: LeoItemBinding<VB>,
     listener: LeoItemBindListener<T, VB>
 ): LeoAdapter<T> {
+
     val inflater: LayoutInflater = LayoutInflater.from(context)
 
     val leoAdapter: LeoAdapterSync<T, VB> = LeoAdapterSync(inflater, getViewBinding, listener)
@@ -33,6 +34,7 @@ fun <T, VB : ViewBinding> ViewPager2.setupAdapter(
     getViewBinding: LeoItemBinding<VB>,
     listener: LeoItemBindListener<T, VB>
 ): LeoAdapter<T> {
+
     val inflater: LayoutInflater = LayoutInflater.from(context)
     this.orientation = orientation
 
@@ -64,6 +66,7 @@ fun <T, VB : ViewBinding> ViewPager2.setupAdapter(
     diffUtil: DiffUtil.ItemCallback<T>,
     listener: LeoItemBindListener<T, VB>
 ): LeoAdapter<T> {
+
     val inflater: LayoutInflater = LayoutInflater.from(context)
     this.orientation = orientation
 

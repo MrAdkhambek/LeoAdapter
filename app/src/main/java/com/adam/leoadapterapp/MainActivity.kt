@@ -18,10 +18,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, RecyclerActivity::class.java))
         }
 
-        binding.actionSpinner.setOnClickListener {
-            startActivity(Intent(this, SpinnerActivity::class.java))
-        }
-
         binding.actionViewPager.setOnClickListener {
             startActivity(Intent(this, ViewPagerActivity::class.java))
         }

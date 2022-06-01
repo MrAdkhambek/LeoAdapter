@@ -1,11 +1,11 @@
-package com.adam.leo
+package me.adkhambek.leo
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 
+
 @DslMarker
 annotation class LeoAdapterDsl
-
 
 interface LeoAdapter<T> {
 

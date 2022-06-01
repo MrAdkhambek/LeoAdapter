@@ -1,8 +1,8 @@
-package com.adam.leo.core
+package me.adkhambek.leo.core
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.adam.leo.LeoItemBindListener
+import me.adkhambek.leo.LeoItemBindListener
 
 
 internal class BaseVH<T, VB : ViewBinding>(

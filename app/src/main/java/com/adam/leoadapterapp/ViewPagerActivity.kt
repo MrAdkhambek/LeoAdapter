@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.adam.leo.LeoAdapter
-import com.adam.leo.viewpager.setupAdapter
+import me.adkhambek.leo.LeoAdapter
+import me.adkhambek.leo.viewpager.setupAdapter
 import com.adam.leoadapterapp.data.Person
 import com.adam.leoadapterapp.data.colors
 import com.adam.leoadapterapp.databinding.ActivityViewPagerBinding

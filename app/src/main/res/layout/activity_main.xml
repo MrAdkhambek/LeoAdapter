@@ -14,14 +14,6 @@
         android:layout_height="wrap_content"
         android:text="@string/recycler" />
 
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/actionSpinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/spinner" />
-
-
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/actionViewPager"
         android:layout_width="wrap_content"

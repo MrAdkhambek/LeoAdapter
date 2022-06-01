@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DiffUtil
-import com.adam.leo.LeoAdapter
-import com.adam.leo.recycler.setupAdapter
+import me.adkhambek.leo.LeoAdapter
+import me.adkhambek.leo.recycler.setupAdapter
 import com.adam.leoadapterapp.data.Person
 import com.adam.leoadapterapp.data.colors
 import com.adam.leoadapterapp.databinding.ActivityRecyclerBinding
@@ -23,7 +23,8 @@ class RecyclerActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val leoAdapter: LeoAdapter<Person> = binding.recycler.setupAdapter(
-            RecyclerItemBinding::inflate
+            getViewBinding = RecyclerItemBinding::inflate,
+            diffUtil = DIFF_UTIL,
         ) { itemBinding, index, item ->
             itemBinding.textView.text = "${item.name}  $index"
             itemBinding.textView.setBackgroundResource(colors[index % colors.size])
@@ -46,6 +47,5 @@ class RecyclerActivity : AppCompatActivity() {
 
 val DIFF_UTIL: DiffUtil.ItemCallback<Person> = object : DiffUtil.ItemCallback<Person>() {
     override fun areItemsTheSame(oldItem: Person, newItem: Person): Boolean = oldItem.id == newItem.id
-
     override fun areContentsTheSame(oldItem: Person, newItem: Person): Boolean = oldItem == newItem
 }

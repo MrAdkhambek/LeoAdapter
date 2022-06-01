@@ -1,4 +1,4 @@
-package com.adam.leo.core
+package me.adkhambek.leo.core
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,9 +6,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.adam.leo.LeoAdapter
-import com.adam.leo.LeoItemBindListener
-import com.adam.leo.LeoItemBinding
+import me.adkhambek.leo.LeoAdapter
+import me.adkhambek.leo.LeoItemBindListener
+import me.adkhambek.leo.LeoItemBinding
 
 
 internal class LeoAdapterSync<T, VB : ViewBinding>(
