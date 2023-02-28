@@ -3,17 +3,17 @@ package com.adam.leoadapterapp
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import me.adkhambek.leo.LeoAdapter
-import me.adkhambek.leo.viewpager.setupAdapter
+import androidx.activity.ComponentActivity
 import com.adam.leoadapterapp.data.Person
 import com.adam.leoadapterapp.data.colors
 import com.adam.leoadapterapp.databinding.ActivityViewPagerBinding
 import com.adam.leoadapterapp.databinding.PagePersonBinding
-
+import com.adkhambek.leo.LeoAdapter
+import com.adkhambek.leo.viewpager.setupAdapter
+import com.thedeanda.lorem.LoremIpsum
 
 @SuppressLint("SetTextI18n")
-class ViewPagerActivity : AppCompatActivity() {
+class ViewPagerActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityViewPagerBinding.inflate(layoutInflater)
@@ -32,8 +32,9 @@ class ViewPagerActivity : AppCompatActivity() {
             }
         }
 
+        val lorem = LoremIpsum.getInstance()
         val data = (1..1000).map {
-            Person(it, it, "Adam")
+            Person(it, it, lorem.name)
         }
 
         leoAdapter.setList(data.shuffled())

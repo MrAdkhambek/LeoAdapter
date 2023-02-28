@@ -1,0 +1,70 @@
+[versions]
+# Plugins
+agp = "7.3.1"
+
+# Kotlin
+kotlinVersion = "1.7.0"
+
+# Test
+junit4 = "4.13.2"
+junit5 = "5.9.1"
+robolectric = "4.9"
+
+# Publish
+detektPlugin = "1.20.0"
+ktlintPlugin = "11.0.0"
+maven-publish = "0.24.0"
+
+# Utils
+androidDesugarJdkLibs = "1.2.2"
+
+[plugins]
+android-app = { id = "com.android.application", version.ref = "agp" }
+android-lib = { id = "com.android.library", version.ref = "agp" }
+
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinVersion" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinVersion" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlinVersion" }
+
+publish = { id = "com.vanniktech.maven.publish", version.ref = "maven-publish" }
+dokka   = { id = "org.jetbrains.dokka", version.ref = "kotlinVersion" }
+detekt  = { id = "io.gitlab.arturbosch.detekt", version.ref = "detektPlugin" }
+ktlint  = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintPlugin" }
+
+[libraries]
+android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+publish-gradlePlugin = { group = "com.vanniktech", name = "gradle-maven-publish-plugin", version.ref = "maven-publish" }
+kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlinVersion" }
+android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
+
+coreKtx = "androidx.core:core-ktx:1.9.0"
+activityKtx = "androidx.activity:activity-ktx:1.6.0"
+
+loremIpsum = "com.thedeanda:lorem:2.1"
+
+# Views
+viewpager2 = "androidx.viewpager2:viewpager2:1.0.0"
+recyclerview = "androidx.recyclerview:recyclerview:1.2.1"
+
+# Kotlin
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlinVersion" }
+
+# Utils
+leakcanary = "com.squareup.leakcanary:leakcanary-android:2.9.1"
+dokka-java = { group = "org.jetbrains.dokka", name = "kotlin-as-java-plugin", version.ref = "kotlinVersion" }
+
+# ViewBinding
+viewbinding = "androidx.databinding:viewbinding:7.4.1"
+viewbindingpropertydelegate = "com.github.kirich1409:viewbindingpropertydelegate-noreflection:1.5.6"
+
+# Test
+junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
+robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
+
+androidx-test-ext = { group = "androidx.test.ext", name = "junit", version = "1.1.3" }
+androidx-test-arch = { group = "androidx.arch.core", name = "core-testing", version = "2.1.0" }
+androidx-test-core = { group = "androidx.test", name = "core-ktx", version = "1.4.0" }
+androidx-test-runner = { group = "androidx.test", name = "runner", version = "1.3.0" }
+
+mockk = { group = "io.mockk", name = "mockk", version = "1.13.2" }
+jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit5" }

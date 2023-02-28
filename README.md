@@ -1,19 +1,19 @@
 # LeoAdapter
-[![](https://jitpack.io/v/MrAdkhambek/LeoAdapter.svg)](https://jitpack.io/#MrAdkhambek/LeoAdapter)
-
+-------------
+[![Maven Central](https://img.shields.io/maven-central/v/com.adkhambek.leo/leo.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%com.adkhambek.leo%22)
 
 ```gradle
 allprojects {
     repositories {
         ...
-        maven { url 'https://jitpack.io' }
+        mavenCentral()
     }
 }
 ```
 
 ```grad
 dependencies {
-    implementation 'com.github.MrAdkhambek:LeoAdapter:$lastVersion'
+    implementation 'com.adkhambek.leo:leo:$lastVersion'
 }
 ```
 

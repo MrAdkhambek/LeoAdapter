@@ -3,18 +3,18 @@ package com.adam.leoadapterapp
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
 import androidx.recyclerview.widget.DiffUtil
-import me.adkhambek.leo.LeoAdapter
-import me.adkhambek.leo.recycler.setupAdapter
 import com.adam.leoadapterapp.data.Person
 import com.adam.leoadapterapp.data.colors
 import com.adam.leoadapterapp.databinding.ActivityRecyclerBinding
 import com.adam.leoadapterapp.databinding.RecyclerItemBinding
-
+import com.adkhambek.leo.LeoAdapter
+import com.adkhambek.leo.recycler.setupAdapter
+import com.thedeanda.lorem.LoremIpsum
 
 @SuppressLint("SetTextI18n")
-class RecyclerActivity : AppCompatActivity() {
+class RecyclerActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,8 +34,9 @@ class RecyclerActivity : AppCompatActivity() {
             }
         }
 
+        val lorem = LoremIpsum.getInstance()
         val data = (1..1000).map {
-            Person(it, it, "Adam")
+            Person(it, it, lorem.name)
         }
 
         leoAdapter.setList(data)
