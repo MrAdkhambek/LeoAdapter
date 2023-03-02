@@ -1,6 +1,6 @@
 # Change Log
 
-## v0.0.3 *(2023-03-01)*
+## v0.0.3 *(2023-03-02)*
 
 - Update docs
 - fix CI issue
