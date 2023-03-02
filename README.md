@@ -1,6 +1,6 @@
 # LeoAdapter
 -------------
-[![Maven Central](https://img.shields.io/maven-central/v/com.adkhambek.leo/leo.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%com.adkhambek.leo%22)
+[![Maven Central](https://img.shields.io/maven-central/v/com.adkhambek.leo/leo.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%com.adkhambek.leo)
 
 ```gradle
 allprojects {
