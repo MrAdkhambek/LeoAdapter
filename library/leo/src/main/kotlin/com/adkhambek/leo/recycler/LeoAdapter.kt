@@ -1,6 +1,7 @@
 package com.adkhambek.leo.recycler
 
 import android.view.LayoutInflater
+import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,16 +15,15 @@ import com.adkhambek.leo.core.LeoAdapterSync
 
 @JvmOverloads
 @LeoAdapterDSL
-public fun <T, VB : ViewBinding> RecyclerView.setupAdapter(
-    getViewBinding: LeoItemBinding<VB>,
+public fun <T : Any, VB : ViewBinding> RecyclerView.setupAdapter(
+    viewBinding: LeoItemBinding<VB>,
     layoutManager: LinearLayoutManager = LinearLayoutManager(context),
     inflater: LayoutInflater = LayoutInflater.from(context),
     onBind: LeoItemBindListener<T, VB>
-): LeoAdapter<T> {
-
+): LeoAdapter<T, VB> {
     val leoAdapter: LeoAdapterSync<T, VB> = LeoAdapterSync(
         inflater = inflater,
-        getViewBinding = getViewBinding,
+        getViewBinding = viewBinding,
         onBind = onBind
     )
 
@@ -34,18 +34,38 @@ public fun <T, VB : ViewBinding> RecyclerView.setupAdapter(
 
 @JvmOverloads
 @LeoAdapterDSL
-public fun <T, VB : ViewBinding> RecyclerView.setupAdapter(
-    getViewBinding: LeoItemBinding<VB>,
-    diffUtil: DiffUtil.ItemCallback<T>,
+public fun <T : Any, VB : ViewBinding> RecyclerView.setupAdapter(
+    viewBinding: LeoItemBinding<VB>,
+    diffCallback: DiffUtil.ItemCallback<T>,
     layoutManager: LinearLayoutManager = LinearLayoutManager(context),
     inflater: LayoutInflater = LayoutInflater.from(context),
     onBind: LeoItemBindListener<T, VB>
-): LeoAdapter<T> {
-
+): LeoAdapter<T, VB> {
     val leoAdapter: LeoAdapterAsync<T, VB> = LeoAdapterAsync(
+        getViewBinding = viewBinding,
+        diffCallback = diffCallback,
         inflater = inflater,
-        diffUtil = diffUtil,
-        getViewBinding = getViewBinding,
+        onBind = onBind
+    )
+
+    this.layoutManager = layoutManager
+    this.adapter = leoAdapter
+    return leoAdapter
+}
+
+@JvmOverloads
+@LeoAdapterDSL
+public fun <T : Any, VB : ViewBinding> RecyclerView.setupAdapter(
+    viewBinding: LeoItemBinding<VB>,
+    config: AsyncDifferConfig<T>,
+    layoutManager: LinearLayoutManager = LinearLayoutManager(context),
+    inflater: LayoutInflater = LayoutInflater.from(context),
+    onBind: LeoItemBindListener<T, VB>
+): LeoAdapter<T, VB> {
+    val leoAdapter: LeoAdapterAsync<T, VB> = LeoAdapterAsync(
+        getViewBinding = viewBinding,
+        inflater = inflater,
+        config = config,
         onBind = onBind
     )
 

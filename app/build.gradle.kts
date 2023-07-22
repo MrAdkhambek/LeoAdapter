@@ -22,7 +22,8 @@ android {
 }
 
 dependencies {
-    implementation(projects.leo)
+    implementation(projects.library.leo)
+    implementation(projects.library.paging)
 
     implementation(libs.coreKtx)
     implementation(libs.activityKtx)

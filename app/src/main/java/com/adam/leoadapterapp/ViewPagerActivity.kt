@@ -19,8 +19,8 @@ class ViewPagerActivity : ComponentActivity() {
         val binding = ActivityViewPagerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val leoAdapter: LeoAdapter<Person> = binding.viewPager.setupAdapter(
-            PagePersonBinding::inflate
+        val leoAdapter: LeoAdapter<Person, PagePersonBinding> = binding.viewPager.setupAdapter(
+            viewBinding = PagePersonBinding::inflate
         ) { itemBinding, index, item ->
 
             itemBinding.personName.text = "${item.name}  $index"

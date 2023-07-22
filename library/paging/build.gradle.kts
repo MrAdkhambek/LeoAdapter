@@ -15,8 +15,10 @@ android {
 }
 
 dependencies {
+    api(projects.library.core)
     compileOnly(libs.viewbinding)
 
     compileOnly(libs.viewpager2)
     compileOnly(libs.recyclerview)
+    compileOnly(libs.paging.runtime)
 }

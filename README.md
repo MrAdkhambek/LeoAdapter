@@ -17,70 +17,58 @@ dependencies {
 ```
 
 ```kotlin
-    val leoAdapter: LeoAdapter<Person> = binding.recycler.setupAdapter(
-        RecyclerItemBinding::inflate
-    ) { itemBinding, index, item ->
-        itemBinding.textView.text = "${item.name}  $index"
-        itemBinding.textView.setBackgroundResource(colors[index % colors.size])
+val leoAdapter: LeoAdapter<Person, ItemBinding> = binding.recycler.setupAdapter(
+    ItemBinding::inflate
+) { itemBinding, index, item ->
+    itemBinding.textView.text = "${item.name}  $index"
+    itemBinding.textView.setBackgroundResource(colors[index % colors.size])
 
-        itemBinding.root.setOnClickListener {
-            Toast.makeText(itemBinding.root.context, "${item.name}  $index", Toast.LENGTH_SHORT).show()
-        }
+    itemBinding.root.setOnClickListener {
+        TODO("logic here")
     }
+}
 
-    val data = (1..1000).map {
-        Person(it, it, "Adam")
-    }
+val data = (1..1000).map {
+    Person(it, it, "Adam")
+}
 
-    leoAdapter.setList(data)
+leoAdapter.setList(data)
 ```
 
 
 ```kotlin
-    val leoAdapter: LeoAdapter<Person> = binding.viewPager2.setupAdapter(
-        RecyclerItemBinding::inflate
-    ) { itemBinding, index, item ->
-        itemBinding.textView.text = "${item.name}  $index"
-        itemBinding.textView.setBackgroundResource(colors[index % colors.size])
+val leoAdapter: LeoAdapter<Person, ItemBinding> = binding.viewPager2.setupAdapter(
+    ItemBinding::inflate
+) { itemBinding, index, item ->
+    itemBinding.textView.text = "${item.name}  $index"
+    itemBinding.textView.setBackgroundResource(colors[index % colors.size])
 
-        itemBinding.root.setOnClickListener {
-            Toast.makeText(itemBinding.root.context, "${item.name}  $index", Toast.LENGTH_SHORT).show()
-        }
+    itemBinding.root.setOnClickListener {
+        TODO("logic here")
     }
+}
 
-    val data = (1..1000).map {
-        Person(it, it, "Adam")
-    }
+val data = (1..1000).map {
+    Person(it, it, "Adam")
+}
 
-    leoAdapter.setList(data)
+leoAdapter.setList(data)
 ```
 
-
+## Paging Adapter
 ```kotlin
-    val leoAdapter: LeoAdapter<Person> = binding.spinner.setupAdapter(
-        RecyclerItemBinding::inflate
-    ) { itemBinding, index, item ->
-        itemBinding.textView.text = "${item.name}  $index"
-        itemBinding.textView.setBackgroundResource(colors[index % colors.size])
+val leoAdapter: LeoPagingAdapter<Person, ItemBinding> = binding.recycler.setupPagingAdapter(
+    viewBinding = RecyclerItemBinding::inflate,
+    diffCallback = DIFF_UTIL,
+) { itemBinding, index, item -> // item is nullable 😢
+    itemBinding.textView.text = "${item?.name}  $index"
+    itemBinding.textView.setBackgroundResource(colors[index % colors.size])
 
-        itemBinding.root.setOnClickListener {
-            Toast.makeText(itemBinding.root.context, "${item.name}  $index", Toast.LENGTH_SHORT).show()
-        }
+    itemBinding.root.setOnClickListener {
+        TODO("logic here")
     }
+}
 
-    val data = (1..1000).map {
-        Person(it, it, "Adam")
-    }
-
-    leoAdapter.setList(data)
+val data : PaginData<Person> = TODO()
+leoAdapter.submitData(data)
 ```
-
-```kotlin
-data class Person(
-    val id: Int,
-    val age: Int,
-    val name: String
-)
-```
-
-![Image](media/carbon.png)

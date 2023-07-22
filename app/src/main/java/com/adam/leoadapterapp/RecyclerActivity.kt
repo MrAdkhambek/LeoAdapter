@@ -22,15 +22,16 @@ class RecyclerActivity : ComponentActivity() {
         val binding = ActivityRecyclerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val leoAdapter: LeoAdapter<Person> = binding.recycler.setupAdapter(
-            getViewBinding = RecyclerItemBinding::inflate,
-            diffUtil = DIFF_UTIL,
+        val leoAdapter: LeoAdapter<Person, RecyclerItemBinding> = binding.recycler.setupAdapter(
+            viewBinding = RecyclerItemBinding::inflate,
+            diffCallback = DIFF_UTIL,
         ) { itemBinding, index, item ->
             itemBinding.textView.text = "${item.name}  $index"
             itemBinding.textView.setBackgroundResource(colors[index % colors.size])
 
             itemBinding.root.setOnClickListener {
-                Toast.makeText(itemBinding.root.context, "${item.name}  $index", Toast.LENGTH_SHORT).show()
+                Toast.makeText(itemBinding.root.context, "${item.name}  $index", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
