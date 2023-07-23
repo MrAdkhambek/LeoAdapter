@@ -1,4 +1,5 @@
 @file:Suppress("UnstableApiUsage")
+
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
@@ -19,7 +20,6 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-
 
 rootProject.name = "LeoAdapter-App"
 

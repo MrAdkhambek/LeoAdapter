@@ -5,6 +5,7 @@
 
 plugins {
     id("com.adkhambek.android.library")
+    id("com.adkhambek.publish")
 }
 
 android {
@@ -15,6 +16,5 @@ android {
 
 dependencies {
     compileOnly(libs.viewbinding)
-    compileOnly(libs.viewpager2)
     compileOnly(libs.recyclerview)
 }
