@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.adam.leoadapterapp.data.Person
 import com.adam.leoadapterapp.data.colors
@@ -40,10 +41,14 @@ class RecyclerActivity : ComponentActivity() {
             Person(it, it, lorem.name)
         }
 
-        leoAdapter.setList(data)
+        leoAdapter.submitData(data)
         binding.fab.setOnClickListener {
-            leoAdapter.setList(data.shuffled())
+            leoAdapter.submitData(data.shuffled())
         }
+
+        ConcatAdapter(
+            leoAdapter
+        )
     }
 }
 

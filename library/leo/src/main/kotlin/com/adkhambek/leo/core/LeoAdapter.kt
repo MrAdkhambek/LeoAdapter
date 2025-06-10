@@ -12,13 +12,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.viewbinding.ViewBinding
 import com.adkhambek.leo.LeoAdapter
 import com.adkhambek.leo.LeoItemBindListener
+import com.adkhambek.leo.LeoItemBindPayloadListener
 import com.adkhambek.leo.LeoItemBinding
 import com.adkhambek.leo.LeoVH
 
 internal class LeoAdapterSync<T : Any, VB : ViewBinding>(
     private val inflater: LayoutInflater,
     private val getViewBinding: LeoItemBinding<VB>,
-    private val onBind: LeoItemBindListener<T, VB>
+    private val onBind: LeoItemBindListener<T, VB>,
+    private val onBindPayloads: LeoItemBindPayloadListener<T, VB>,
 ) : LeoAdapter<T, VB>() {
 
     private var mData: List<T> = emptyList()
@@ -30,14 +32,22 @@ internal class LeoAdapterSync<T : Any, VB : ViewBinding>(
 
     override fun getItemCount(): Int = mData.size
 
-    override fun onBindViewHolder(holder: LeoVH<VB>, position: Int): Unit = onBind(
-        holder.viewBinding,
-        position,
-        mData[position]
-    )
+    override fun onBindViewHolder(
+        holder: LeoVH<VB>,
+        position: Int
+    ): Unit = onBind(holder.viewBinding, position, mData[position])
+
+    override fun onBindViewHolder(
+        holder: LeoVH<VB>,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+        if (payloads.isEmpty()) super.onBindViewHolder(holder, position, payloads)
+        else onBindPayloads(holder.viewBinding, position, mData[position], payloads)
+    }
 
     @SuppressLint("NotifyDataSetChanged")
-    override fun setList(data: List<T>) {
+    override fun submitData(data: List<T>) {
         mData = data
         notifyDataSetChanged()
     }
@@ -49,13 +59,16 @@ internal class LeoAdapterAsync<T : Any, VB : ViewBinding> : LeoAdapter<T, VB> {
     private val mDiffer: AsyncListDiffer<T>
     private val getViewBinding: LeoItemBinding<VB>
     private val onBind: LeoItemBindListener<T, VB>
+    private val onBindPayloads: LeoItemBindPayloadListener<T, VB>
 
     constructor(
         inflater: LayoutInflater,
         diffCallback: DiffUtil.ItemCallback<T>,
         getViewBinding: LeoItemBinding<VB>,
-        onBind: LeoItemBindListener<T, VB>
+        onBind: LeoItemBindListener<T, VB>,
+        onBindPayloads: LeoItemBindPayloadListener<T, VB>
     ) {
+        this.onBindPayloads = onBindPayloads
         this.getViewBinding = getViewBinding
         this.inflater = inflater
         this.onBind = onBind
@@ -70,8 +83,10 @@ internal class LeoAdapterAsync<T : Any, VB : ViewBinding> : LeoAdapter<T, VB> {
         inflater: LayoutInflater,
         config: AsyncDifferConfig<T>,
         getViewBinding: LeoItemBinding<VB>,
-        onBind: LeoItemBindListener<T, VB>
+        onBind: LeoItemBindListener<T, VB>,
+        onBindPayloads: LeoItemBindPayloadListener<T, VB>
     ) {
+        this.onBindPayloads = onBindPayloads
         this.getViewBinding = getViewBinding
         this.inflater = inflater
         this.onBind = onBind
@@ -88,12 +103,20 @@ internal class LeoAdapterAsync<T : Any, VB : ViewBinding> : LeoAdapter<T, VB> {
     }
 
     override fun getItemCount(): Int = mDiffer.currentList.size
-    override fun setList(data: List<T>): Unit = mDiffer.submitList(data)
+    override fun submitData(data: List<T>): Unit = mDiffer.submitList(data)
     private fun getItem(position: Int): T = mDiffer.currentList[position]
 
-    override fun onBindViewHolder(holder: LeoVH<VB>, position: Int): Unit = onBind(
-        holder.viewBinding,
-        position,
-        getItem(position)
-    )
+    override fun onBindViewHolder(
+        holder: LeoVH<VB>,
+        position: Int
+    ): Unit = onBind(holder.viewBinding, position, getItem(position))
+
+    override fun onBindViewHolder(
+        holder: LeoVH<VB>,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+        if (payloads.isEmpty()) super.onBindViewHolder(holder, position, payloads)
+        else onBindPayloads(holder.viewBinding, position, getItem(position), payloads)
+    }
 }

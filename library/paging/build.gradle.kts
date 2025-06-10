@@ -9,6 +9,7 @@ plugins {
 }
 
 android {
+    namespace = "com.adkhambek.leo"
     kotlinOptions {
         freeCompilerArgs = (freeCompilerArgs + listOf("-Xexplicit-api=warning")).distinct()
     }

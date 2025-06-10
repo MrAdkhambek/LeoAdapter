@@ -14,7 +14,7 @@ import org.gradle.kotlin.dsl.getByType
  * Configure base Kotlin with Android options
  */
 internal fun Project.configureTestAndroid(
-    commonExtension: CommonExtension<*, *, *, *>,
+    commonExtension: CommonExtension<*, *, *, *, *, *>,
 ) {
     commonExtension.apply {
         testOptions {

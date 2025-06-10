@@ -23,7 +23,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "LeoAdapter-App"
 
-include(":app")
+//include(":app")
 
 include(
     ":library:core",

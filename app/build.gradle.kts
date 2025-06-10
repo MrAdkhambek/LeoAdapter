@@ -8,7 +8,8 @@ plugins {
 }
 
 android {
-    compileSdk = 33
+    compileSdk = 35
+    namespace = "com.adam.leoadapterapp"
 
     defaultConfig {
         minSdk = 21
@@ -25,8 +26,8 @@ dependencies {
 //    implementation(projects.library.leo)
 //    implementation(projects.library.paging)
 
-    implementation("com.adkhambek.leo:leo:0.0.4")
-    implementation("com.adkhambek.leo:leo-paging:0.0.4")
+    implementation("com.adkhambek.leo:leo:0.0.7")
+    implementation("com.adkhambek.leo:leo-paging:0.0.7")
 
     implementation(libs.coreKtx)
     implementation(libs.activityKtx)

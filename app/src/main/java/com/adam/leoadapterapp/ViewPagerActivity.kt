@@ -37,9 +37,9 @@ class ViewPagerActivity : ComponentActivity() {
             Person(it, it, lorem.name)
         }
 
-        leoAdapter.setList(data.shuffled())
+        leoAdapter.submitData(data.shuffled())
         binding.fab.setOnClickListener {
-            leoAdapter.setList(data.shuffled())
+            leoAdapter.submitData(data.shuffled())
         }
     }
 }

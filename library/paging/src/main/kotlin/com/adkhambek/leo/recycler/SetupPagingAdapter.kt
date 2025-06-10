@@ -5,8 +5,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+import com.adkhambek.leo.DefaultLeoItemBindPayloadListener
 import com.adkhambek.leo.LeoAdapterDSL
 import com.adkhambek.leo.LeoItemBindListener
+import com.adkhambek.leo.LeoItemBindPayloadListener
 import com.adkhambek.leo.LeoItemBinding
 import com.adkhambek.leo.LeoPagingAdapter
 import com.adkhambek.leo.core.LeoPagingDataAdapter
@@ -18,13 +20,15 @@ public fun <T : Any, VB : ViewBinding> RecyclerView.setupPagingAdapter(
     diffCallback: DiffUtil.ItemCallback<T>,
     layoutManager: LinearLayoutManager = LinearLayoutManager(context),
     inflater: LayoutInflater = LayoutInflater.from(context),
-    onBind: LeoItemBindListener<T?, VB>
+    onBindPayloads: LeoItemBindPayloadListener<T?, VB> = DefaultLeoItemBindPayloadListener(),
+    onBind: LeoItemBindListener<T?, VB>,
 ): LeoPagingAdapter<T, VB> {
     val leoAdapter: LeoPagingDataAdapter<T, VB> = LeoPagingDataAdapter(
         getViewBinding = viewBinding,
         diffCallback = diffCallback,
         inflater = inflater,
-        onBind = onBind
+        onBind = onBind,
+        onBindPayloads = onBindPayloads,
     )
 
     this.layoutManager = layoutManager
